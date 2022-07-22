@@ -1,38 +1,70 @@
-#!/usr/bin/env python3
-""" Factor numbers """
-from sys import argv
-from math import sqrt
+#!/usr/bin/python3
+from random import randint
 
 
-def open_read_file(file_name):
-    """read from file
-    add to array
+def gcd(a, b):
+    """ Returns the greatest common divisor of the two numbers
     """
-    with open(file_name, encoding="utf-8") as file:
-        lines = file.readlines()
-    number_to_factor = []
-    for line in lines:
-        number_to_factor.append(int(line))
-    return number_to_factor
+    while b:
+        a, b = b, a % b
+    return a
 
 
-def find_and_times(n):
-    """factor each
-    n given
+def _pollard_brent_func(c, n, x):
+    """ Return f(x) = (x^2 + c) % n
+        Assume c < n
     """
-    for i in range(2, n):
-        if n == ((n // i) * i):
-            print("{}={}*{}".format(n, (n // i), i))
-            break
+    y = (x ** 2) % n + c
+    if y >= n:
+        y -= n
+
+    assert 0 <= y < n
+    return y
 
 
-def fac_list(ls):
-    """factor each
-    num in ls
+def brent_factorise(n, iterations=None):
+    """ Perform Brent's variant of Pollard's rho factorization algorithm to
+        attempt to find a non-trivial factor of the given number number, n.
+        If iterations > 0, return None if no factors are found within its range
     """
-    for i in ls:
-        find_and_times(i)
+    y, c, m = (randint(1, n - 1) for _ in range(3))
+    r, q, g = 1, 1, 1
+    i = 0
+    while g == 1:
+        x = y
+        for _ in range(r):
+            y = _pollard_brent_func(c, n, y)
+        k = 0
+        while k < r and g == 1:
+            ys = y
+            for _ in range(min(m, r - k)):
+                y = _pollard_brent_func(c, n, y)
+                q = (q * abs(x - y)) %  n
+            g = gcd(q, n)
+            k += m
+        r *= 2
+        if iterations:
+            i += 1
+            if i == iterations:
+                return None
+
+    if g == n:
+        while True:
+            ys = _pollard_brent_func(c, n, ys)
+            g = gcd(abs(x - ys), n)
+            if g > 1:
+                break
+    return g
 
 
-if len(argv) == 2:
-    fac_list(open_read_file(argv[1]))
+if __name__ == '__main__':
+    from sys import argv
+
+    if len(argv) != 2:
+        exit(1)
+
+    with open(argv[1], "r") as f:
+        for i in f:
+            n = int(i[:-1])
+            res = brent_factorise(n)
+            print("{}={}*{}".format(n, n // res, res))
