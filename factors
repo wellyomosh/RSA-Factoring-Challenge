@@ -1,29 +1,49 @@
-#!/usr/bin/python3
-"""Factorize as many numbers as possible into a product of two smaller numbers."""
-
+#!/usr/bin/env python3
 import sys
-
-Try:
-    file_name = sys.argv[2]
-except Exception:
-	raise TypeError("No file to read.")
+import os
 
 
-count = 0
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: factors <file>", file=sys.stderr)
+        exit(1)
+    if not os.path.isfile(sys.argv[1]):
+        print(f"factors: File {sys.argv[1]} not found", file=sys.stderr)
+        exit(1)
 
-with open(file_name) as fp:
-    Lines = fp.readlines()
-    for line in Lines:
-        count += 1
-        lineValue = line.strip()
-        if isinstance(lineValue, int) and lineValue > 1:
-        	try:
-        		for i in range(2,round(lineValue/2)):
-        			result = lineValue % i
-        			if result == 0:
-        				print("{}={}*{}".format(lineValue,result,i))
-        				break
-        	except Exception:
-        		pass
-        else:
-        	raise TypeError("Data no valide at line {}. All line must conatin number gretter than 1 and no space arround the number.".format(count))
+    with open(sys.argv[1]) as f:
+        for i in f:
+            i = int(i)
+            if i % 2 == 0:
+                print(f"{i}={i // 2}*2")
+                continue
+
+            div = rho(i, 1)
+            print(f"{i}={i // div}*{div}")
+
+
+def rho(n, c):
+    t = 2
+    h = 2
+    d = 1
+
+    while d == 1:
+        t = ((t ** 2) + c) % n
+        h = ((h ** 2) + c) % n
+        h = ((h ** 2) + c) % n
+        d = gcd(t - h, n)
+
+    if d == n:
+        return rho(n, c + 1)
+    return d
+
+
+def gcd(a, b):
+    if(b == 0):
+        return a
+    else:
+        return gcd(b, a % b)
+
+
+if __name__ == '__main__':
+    main()
