@@ -1,5 +1,13 @@
-#!/usr/bin/python3
-from factors_functions import *
-if __name__ == '__main__':
-
-    print(unix_time(print_factors))
+#!/usr/bin/env python3
+from sys import argv
+with open(argv[1], "r") as f:
+    for x in f:
+        y = int(x)
+        m = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199}
+        for i in m:
+            if (y % i) is 0:
+                p = int(y / i)
+                q = i
+                print("{}={}*{}".format(y, p, q))
+                break
+        continue
