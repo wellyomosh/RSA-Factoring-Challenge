@@ -6,12 +6,11 @@ import math
 from sys import argv
 
 with open(argv[1], mode='r', encoding="utf-8") as f:
-	for i, line in enumerate(f):
-		integer = int(line)
+	lines = f.read().split('\n')
 		if (integer % 2 == 0):
 			print ("{}={}*{}".format(integer, integer // 2, 2))
 		else:
-			int_root = int(integer**(1/2))
+			int_root = math.floor(math.sqrt(integer))
 			for factor in range(3, 1 + int_root, 2):			
 				if integer % factor == 0:
 					divisor = integer // factor
