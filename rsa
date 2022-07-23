@@ -1,46 +1,47 @@
-#!/usr/bin/python3
-from sys import argv
-import math
-"""gets the first two factors of any number"""
+#!/usr/bin/env python3
+"""Factors numbers into primes quick-style"""
 
+from sys import argv, exit
 
-def is_prime(num):
-    """checks if a number is prime"""
-    i = 3
-    if num % 2 == 0:
-        return False
-    while i * i <= num:
-        if num % i == 0:
-            return False
-        i += 2
-    return True
+primes = __import__("primes").primes
+primes2 = __import__("primes2").primes2
+primes3 = __import__("primes3").primes3
 
+def factorize(num):
 
-def factory(num):
-    """This factor function gets the factors of a number & prints them out"""
-    if num % 2 == 0:
-        i = 2
-        print("{}={}*{}".format(num, int(num/i), i))
-    else:
-        sq = math.sqrt(num)
-        if sq % 1 == 0:
-            print("{}={}*{}".format(num, sq, int(num/sq)))
+    #print("FACTORIZING: ", num)
+    for primelist in primes:
+        for p in primelist:
+            if (num % p == 0):
+                if p > num // p:
+                    print("{}={}*{}".format(num, p, num // p))
+                else:
+                    print("{}={}*{}".format(num, num // p, p))
+                return
+
+    for p in primes2:
+        if (num % p == 0):
+            if p > num // p:
+                print("{}={}*{}".format(num, p, num // p))
+            else:
+                print("{}={}*{}".format(num, num // p, p))
             return
-        sq = int(sq) + 1
-        for i in range(3, sq, +2):
-            if num % i == 0:
-                if is_prime(i):
-                    print("{}={}*{}".format(num, int(num/i), i))
-                    return
 
+    for p in primes3:
+        if (num % p == 0):
+            if p > num // p:
+                print("{}={}*{}".format(num, p, num // p))
+            else:
+                print("{}={}*{}".format(num, num // p, p))
+            return
 
-def factors(filename):
-    """read_file"""
-    with open(filename, encoding="utf-8") as my_file:
-        for i in my_file.readlines():
-            n = int(i)
-            result = factory(n)
-
+    print("{}={}*{}".format(num, num, 1))
 
 if __name__ == "__main__":
-    factors(argv[1])
+    if len(argv) != 2:
+        print("USAGE: factors <file>")
+        exit(1)
+
+    with open(argv[1], 'r') as file:
+        for line in file:
+            factorize(int(line))
