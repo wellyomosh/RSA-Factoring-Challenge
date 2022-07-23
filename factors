@@ -1,15 +1,14 @@
 #!/usr/bin/python3
-# Factorize all the things
 
 import sys
 
-with open(sys.argv[1]) as fp:
-
-    arg = fp.readline()
-    while arg:
-        # print (arg)
-        for i in range(2, int(arg) // 2):
-            if (int(arg) % i == 0):
-                print("{}={}*{}".format(int(arg),int(arg) // i, i))
-                break
-        arg = fp.readline()
+with open(sys.argv[1], 'r') as f:
+    for num in f.read().split():
+        num = int(num)
+        if num % 2 == 0:
+            print("{}={}*{}".format(num, 2, num // 2))
+        else: 
+            for divisors in range(3, num // 2, 2):
+                if num % divisors == 0:
+                    print("{}={}*{}".format(num, divisors, num // divisors))
+                    break
