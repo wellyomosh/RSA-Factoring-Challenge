@@ -1,18 +1,25 @@
 #!/usr/bin/python3
-"""
-Factorizing all numbers within a file
-"""
-import math
 from sys import argv
+from math import sqrt
 
-with open(argv[1], mode='r', encoding="utf-8") as f:
-	lines = f.read().split('\n')
-		if (integer % 2 == 0):
-			print ("{}={}*{}".format(integer, integer // 2, 2))
-		else:
-			int_root = math.floor(math.sqrt(integer))
-			for factor in range(3, 1 + int_root, 2):			
-				if integer % factor == 0:
-					divisor = integer // factor
-					print ("{}={}*{}".format(integer, divisor, factor))
-					break;
+
+def factor():
+    with open(argv[1]) as f:
+        for line in f:
+            num = int(line)
+            print("{:d}=".format(num), end="")
+            if num % 2 == 0:
+                print("{}*2".format(num//2))
+                continue
+            sqn = int(sqrt(num))
+            if sqn % 2 == 0:
+                sqn += 1
+            for i in range(3, sqn + 1, 2):
+                if num % i == 0:
+                    print("{}*{}".format(i, num//i))
+                    break
+            if num % i != 0:
+                print("{}={}*1".format(num, num))
+
+
+factor()
