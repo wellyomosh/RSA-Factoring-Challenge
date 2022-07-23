@@ -1,14 +1,10 @@
-#!/usr/bin/python3
-# Factorize as many numbers as possible into a product of two smaller numbers
-import sys
+#!/usr/bin/env bash
+# read from file given as argv[1] ($1) and print factors for each num in file
 
+FILE=$1
 
-with open(sys.argv[1], "r", encoding="utf-8") as f:
-    lines = f.readlines()
-
-    for line in lines:
-        n = int(line)
-        for i in range(2, n):
-            if n % i == 0:
-                break
-        print(f"{n}={int(n/i)}*{i}")
+while read NUM
+do
+    factors=($(factor $NUM))
+    echo "$NUM=$(($NUM/${factors[1]}))*${factors[1]}"
+done < $FILE
