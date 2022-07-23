@@ -1,13 +1,8 @@
 #!/usr/bin/env bash
 # Prints a natural numbers to factor.
-
-FILE=$1
-while read Fnumber
+while read -r num_line
 do
-    factors=($(factor $Fnumber))
-    echo "$Fnumber=$(($Fnumber/${factors[1]}))*${factors[1]}"
-done < $FILE
-	(time ./a.out) 2>&1|grep real;
-	(time ./a.out) 2>&1|grep user;
-	(time ./a.out) 2>&1|grep sys;
-		
+    factor_value=($(factor $num_line))
+    echo "$num_line=$(($num_line/${factor_value[1]}))*${factor_value[1]}"
+done < $1
+(time ./a.out) 2>&1|grep real;(time ./a.out) 2>&1|grep user; (time ./a.out) 2>&1|grep sys;		
