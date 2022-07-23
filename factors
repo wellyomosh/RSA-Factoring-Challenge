@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-#First argument value is read by the variable $1 which will contain the filename for reading
+# Prints a natural numbers to factor.
 
 FILE=$1
-
-# If the file exists in the current location then while loop will read the file line by line
-
-while read NUMBERS;
+while read Fnumber
 do
-    factors=($(factor $NUMBERS))
-    echo "$NUMBERS=$(($NUMBERS/${factors[1]}))*${factors[1]}"
+    factors=($(factor $Fnumber))
+    echo "$Fnumber=$(($Fnumber/${factors[1]}))*${factors[1]}"
 done < $FILE
-	
+	(time ./a.out) 2>&1|grep real;
+	(time ./a.out) 2>&1|grep user;
+	(time ./a.out) 2>&1|grep sys;
+		
